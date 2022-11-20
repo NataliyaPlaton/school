@@ -10,6 +10,7 @@ import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class StudentService {
@@ -76,7 +77,28 @@ public class StudentService {
         logger.info("Was invoked method for get student by limit");
         return studentRepository.getStudentByLimit();
     }
+
+    public Collection<Student> getAll() {
+        return studentRepository.findAll();
+    }
+
+    public Stream<String> getNamesStartWithASorted() {
+        return studentRepository.findAll().stream()
+                .map(Student -> Student.getName())
+                .map(name -> name.toUpperCase())
+                .filter(name -> name.startsWith("A"))
+                .sorted();
+    }
+
+    public double getMediumAge() {
+        return studentRepository.findAll().stream()
+                .mapToDouble(Student -> Student.getAge())
+                .average().orElseThrow();
+
+    }
 }
+
+
 
 
 
