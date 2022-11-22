@@ -1,5 +1,7 @@
 package ru.hogwarts.school.controller;
 
+import liquibase.pro.packaged.L;
+import liquibase.pro.packaged.S;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +11,7 @@ import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 @RestController
@@ -76,6 +79,27 @@ public class StudentController {
 
     public List<Student> getStudentByLimit() {
         return studentService.getStudentByLimit();
+    }
+
+    @GetMapping("/namesStudentStartsWhithA")
+    public Stream<String> getNamesStartWithASorted() {
+        return studentService.getNamesStartWithASorted();
+    }
+
+    @GetMapping("/mediumAge")
+    public double getMediumAge() {
+        return studentService.getMediumAge();
+    }
+
+
+    @GetMapping("/print")
+    public void printStudents() {
+        studentService.printStudents();
+    }
+
+    @GetMapping("/printSync")
+    public void printStudentsSync() {
+        studentService.printStudentsSync();
     }
 }
 
