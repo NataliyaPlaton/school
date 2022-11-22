@@ -1,13 +1,16 @@
 package ru.hogwarts.school.service;
 
+import liquibase.pro.packaged.S;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.StudentNotFoundException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
@@ -94,8 +97,36 @@ public class StudentService {
         return studentRepository.findAll().stream()
                 .mapToDouble(Student -> Student.getAge())
                 .average().orElseThrow();
-
     }
+
+    public void printStudents() {
+        List<Student> students = studentRepository.findAll(PageRequest.of(0, 6)).getContent();
+
+        printStudents(students.subList(0, 2));
+        new Thread(() -> printStudents(students.subList(2, 4))).start();
+        new Thread(() -> printStudents(students.subList(4, 6))).start();
+    }
+
+    private void printStudents(List<Student> students) {
+        for (Student student : students) {
+            logger.info(String.valueOf(student));
+        }
+    }
+
+    private synchronized void printStudentsSync(List<Student> students) {
+        for (Student student : students) {
+            logger.info(String.valueOf(student));
+        }
+    }
+
+    public void printStudentsSync() {
+        List<Student> students = studentRepository.findAll(PageRequest.of(0, 6)).getContent();
+
+        printStudentsSync(students.subList(0, 2));
+        new Thread(() -> printStudentsSync(students.subList(2, 4))).start();
+        new Thread(() -> printStudentsSync(students.subList(4, 6))).start();
+    }
+
 }
 
 

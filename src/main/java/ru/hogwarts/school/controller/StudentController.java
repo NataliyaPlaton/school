@@ -90,6 +90,17 @@ public class StudentController {
     public double getMediumAge() {
         return studentService.getMediumAge();
     }
+
+
+    @GetMapping("/print")
+    public void printStudents() {
+        studentService.printStudents();
+    }
+
+    @GetMapping("/printSync")
+    public void printStudentsSync() {
+        studentService.printStudentsSync();
+    }
 }
 
 
